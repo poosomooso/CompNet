@@ -33,6 +33,7 @@ if __name__ == "__main__":
     with BlinkTX(15,"GPIO_22",direction="TX") as blink:
         while True:
             msg = input("MESSAGE TO SEND (EMPTY ENTRY YIELDS RANDOM QUOTE) :")
+            blink.blinkTX(0,1)
             if not msg:
                 blink(MorseTX(getquote()))
             elif msg.upper() == "QUIT":
