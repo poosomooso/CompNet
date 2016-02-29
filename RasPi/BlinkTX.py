@@ -31,15 +31,14 @@ if __name__ == "__main__":
         return "".join([a if a in string.ascii_uppercase+" " else " "+"".join(unicodedata.name(a,"").split("-"))+" " for a in Q.upper() ])
 
     with BlinkTX(15,"GPIO_22",direction="TX") as blink:
-        while True:
-            msg = input("MESSAGE TO SEND (EMPTY ENTRY YIELDS RANDOM QUOTE) :")
-            blink.blinkTX(0,1)
-            if not msg:
-                blink(MorseTX(getquote()))
-            elif msg.upper() == "QUIT":
-                break
-            else:
-                blink(MorseTX(msg.upper()))
+        msg = input("MESSAGE TO SEND (EMPTY ENTRY YIELDS RANDOM QUOTE) :")
+        blink.blinkTX(0,1)
+        if not msg:
+            blink(MorseTX(getquote()))
+        elif msg.upper() == "QUIT":
+            break
+        else:
+            blink(MorseTX(msg.upper()))
 
 
 
