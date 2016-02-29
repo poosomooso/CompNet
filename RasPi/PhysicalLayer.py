@@ -13,7 +13,7 @@ Q = queue.Queue()
 def receiveblinks(RXpin,blinks=200,duration=.0909090909/4):
     dits=''
     for i in range(blinks):
-    	num_spaces = 0
+        num_spaces = 0
         num_high = 0
         for j in range(11):
             if RXpin.read_pin():
@@ -21,10 +21,10 @@ def receiveblinks(RXpin,blinks=200,duration=.0909090909/4):
             time.sleep(duration)
         reading = round(num_high/11.0)
         if reading == 0:
-        	num_spaces+=1
+            num_spaces+=1
         else:
-        	num_spaces=0
-        if num_spaces>=15 and !dits.isspace():
+            num_spaces=0
+        if num_spaces>=15 and not dits.isspace():
         	#end of message
             Q.put(dits)
             dits = ''
@@ -33,7 +33,8 @@ def receiveblinks(RXpin,blinks=200,duration=.0909090909/4):
     Q.put('END')
     
 def parse_blinks():
-    while (dits=Q.get())!='END':
+    dits=Q.get()
+    while dits!='END':
         morse_mess = ''
         morse_chars = dits.split(' ')
 
@@ -63,7 +64,8 @@ def parse_blinks():
                 except KeyError:
                     pass
 
-        print(message)s
+        print(message)
+        dits=Q.get()
     print('END MESSAGES')
 if __name__ == "__main__":
 
