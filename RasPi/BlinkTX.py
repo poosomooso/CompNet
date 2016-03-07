@@ -23,7 +23,6 @@ if __name__ == "__main__":
     import string
     import unicodedata
     quotes = mobydickquotes.quotes
-
     def getquote():
         return makeMorseHappy(quotes[random.randint(0,len(quotes)-1)])
 
@@ -32,13 +31,11 @@ if __name__ == "__main__":
 
     with BlinkTX(15,"GPIO_22",direction="TX") as blink:
         msg = input("MESSAGE TO SEND (EMPTY ENTRY YIELDS RANDOM QUOTE) :")
-        blink.blinkTX(0,1)
-        if not msg:
-            blink(MorseTX(getquote()))
-        elif msg.upper() == "QUIT":
-            break
-        else:
-            blink(MorseTX(msg.upper()))
-
-
-
+        while True:
+            blink.blinkTX(0,1)
+            if not msg:
+                blink(MorseTX(getquote()))
+            elif msg.upper() == "QUIT":
+                break
+            else:
+                blink(MorseTX(msg.upper()))

@@ -12,8 +12,9 @@ import queue
 Q = queue.Queue()
 def receiveblinks(RXpin,blinks=200,duration=.0909090909/4):
     dits=''
+    num_spaces = 0
     for i in range(blinks):
-        num_spaces = 0
+        
         num_high = 0
         for j in range(11):
             if RXpin.read_pin():
@@ -70,8 +71,8 @@ def parse_blinks():
 if __name__ == "__main__":
 
     with SetPin(16,"GPIO_23",direction="RX") as RXpin:
-        receiveblinks(RXpin)
-        r = threading.Thread(target=receiveblinks,name='RECIEVE')
+        
+        r = threading.Thread(target=receiveblinks,name='RECIEVE',args=(RXpin,))
         p = threading.Thread(target=parse_blinks,name='PARSE')
         r.start()
         p.start()

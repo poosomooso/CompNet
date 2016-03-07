@@ -20,8 +20,4 @@ if __name__ == "__main__":
     print("OOK AT ME")
     for OOKtuple in MorseTX("OOK AT ME"):
         print(OOKtuple)
-
-
-
-~                                                                               
-~                    
+             
