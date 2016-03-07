@@ -6,6 +6,7 @@ import time
 import MorseCode
 import threading
 import queue
+from BlinkTX import *
 
 #thread to read in, generates series of dits
 #thread to translate
@@ -33,7 +34,7 @@ def receiveblinks(RXpin,blinks=200,duration=.0909090909/4):
         dits+=("." if  reading==1 else " ")
     Q.put('END')
     
-def parse_blinks():
+def parse_blinks(datalinkq):
     dits=Q.get()
     while dits!='END':
         morse_mess = ''
@@ -64,16 +65,21 @@ def parse_blinks():
                     message+=d[letters[l]]
                 except KeyError:
                     pass
-
+        datalinkq.put(message)
         print(message)
         dits=Q.get()
     print('END MESSAGES')
-if __name__ == "__main__":
 
+def physicalTransmit(msg):
+    with BlinkTX(15,"GPIO_22",direction="TX") as blink:
+        blink.blinkTX(0,1)
+        blink(MorseTX(msg.upper()))
+
+def reciever(datalinkq):
     with SetPin(16,"GPIO_23",direction="RX") as RXpin:
         
         r = threading.Thread(target=receiveblinks,name='RECIEVE',args=(RXpin,))
-        p = threading.Thread(target=parse_blinks,name='PARSE')
+        p = threading.Thread(target=parse_blinks,name='PARSE',args=(datalinkq,))
         r.start()
         p.start()
         r.join()

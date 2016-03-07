@@ -18,6 +18,7 @@ class BlinkTX(SetPin):
         time.sleep(duration)
 
 if __name__ == "__main__":
+
     import random
     import mobydickquotes
     import string

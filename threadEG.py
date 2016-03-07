@@ -2,14 +2,17 @@
 import threading
 import Queue
 import time
+import threadtest0
 Q1=Queue.Queue(10)
 
 def threadtest(x):
+    threadtest0.main()
     f=threading.Thread(target=foo,name="HIGHER")
     g=threading.Thread(target=goo,name="LOWER",args=(x,))
     print("STARTING")
     f.start()
     g.start()
+
     #synchronize threads when they end
     g.join()
     f.join()
