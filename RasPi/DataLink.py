@@ -32,11 +32,20 @@ def transmit():
 			currentStr = ''
 	splitMessages.append((currentStr,currentLen))
 
-	for tup in len(splitMessages):
-		PhysicalLayer.physicalTransmit(recipient+' '+ID+' '+PROTOCOL+' '+str(len(splitMessages)-tup)+' '+str(splitMessages[tup][1])+' '+splitMessages[tup][0])
+	for i in range(len(splitMessages)):
+		messagesLeft = str(len(splitMessages)-i)
+		messageLength = str(splitMessages[i][1])
+		msg = splitMessages[i][0]
+
+		packet = recipient+' '+ID+' '+PROTOCOL+' '+messagesLeft+' '+messageLength+' '+msg
+
+		PhysicalLayer.physicalTransmit(packet)
 
 def readMessage(q):
+	""" q is the queue to push messages to """
 	def extractHeader(m):
+		""" m is the message """
+
 		splitmsg = m.split()
 		recip = splitmsg[0]
 		src = splitmsg[1]
@@ -49,17 +58,21 @@ def readMessage(q):
 
 		message = m[headerlen:headerlen+int(dataLen)]
 
-		return {'recipient': recip, 'source':src, 'protocol':prot, 'messagenum':remainingMsgs, 'length':dataLen, 'message':message}
-	while(True):
-		msg=Q.get()
+		return {'recipient': recip, 'source':src, 'protocol':prot, 'remainingMsgs':int(remainingMsgs), 'length':int(dataLen), 'message':message}
+
+	messageProgress = {}
+	while True:
+		msg = q.get()
 		data = extractHeader(msg)
-		if data['recipient']==ID:
-			if int(data['messagenum'])>1:
+		src = data['source']
+		if data['recipient'] == ID:
+			if data['remainingMsgs'] > 0:
 				message = data['message']
-				for i in range(int(data['messagenum']), 1, -1):
-					pass #iterate through the next messages and concat string
+				messageProgress[src] = messageProgress.get(src, '')+message
+				# for i in range(data['remainingMsgs'], 0, -1):
+				# 	pass #iterate through the next messages and concat string
 			else:
-				print data['message']
+				print messageProgress.get(src, '')+data['message']
 
 
 
