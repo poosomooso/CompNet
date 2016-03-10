@@ -77,7 +77,7 @@ def physicalTransmit(msg):
 
 def reciever(datalinkq):
     with SetPin(16,"GPIO_23",direction="RX") as RXpin:
-        
+        datalinkq = queue.Queue()
         r = threading.Thread(target=receiveblinks,name='RECIEVE',args=(RXpin,))
         p = threading.Thread(target=parse_blinks,name='PARSE',args=(datalinkq,))
         r.start()

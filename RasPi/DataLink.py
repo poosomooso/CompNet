@@ -79,8 +79,8 @@ def readMessage(q):
 if __name__ == "__main__":
 	tx=threading.Thread(target=transmit,name="TRANSMIT")
 	tx.start()
-	q = queue.Queue
-	PhysicalLayer.reciever(q)
+	# q = queue.Queue
+	# PhysicalLayer.reciever(q)
 
 	#how to pull from physical layer's strings?
 	tx.join()
